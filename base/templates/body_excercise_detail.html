@@ -1,0 +1,305 @@
+{% extends 'layout1.html' %}
+{% block content %}
+
+{% block css %}
+<link rel="stylesheet" href="path/to/print.css" media="print">
+<style>
+  .wa-star-bar-rating, .wa-star-bar-rating i { display:block; height:25px; }
+  .wa-star-bar-rating {
+    width:125px;
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150"><g transform="translate(-25,0)"><path d="m 172.35714,67.190469 -36.77859,35.505441 8.39818,50.4259 -45.132893,-24.00674 -45.362705,23.5696 8.884939,-50.34242 L 25.932197,66.483167 76.55628,59.376583 99.401613,13.644842 121.80408,59.595151 Z"/></g></svg>') repeat-x;
+    mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150"><g transform="translate(-25,0)"><path d="m 172.35714,67.190469 -36.77859,35.505441 8.39818,50.4259 -45.132893,-24.00674 -45.362705,23.5696 8.884939,-50.34242 L 25.932197,66.483167 76.55628,59.376583 99.401613,13.644842 121.80408,59.595151 Z"/></g></svg>') repeat-x;
+    -webkit-mask-size:25px 25px; mask-size:25px 25px; background-color:#aaa;
+  }
+  .wa-star-bar-rating i { background-color:#fe9100; }
+
+  .row.gallery-wrapper { display:flex; flex-wrap:wrap; margin:-10px; }
+  .element-item { padding:10px; }
+  .gallery-box { width:100%; }
+  .gallery-img { width:100%; height:200px; object-fit:cover; }
+
+  @media (min-width:576px){ .element-item{ width:50%; } }
+  @media (min-width:768px){ .element-item{ width:33.33%; } }
+  @media (min-width:992px){ .element-item{ width:25%; } }
+
+  /* Center action buttons on the detail card */
+  .buttons-container { display:flex; justify-content:center; }
+  .buttons-container .d-flex { justify-content:center; }
+
+  /* Print cleanup */
+  @media print {
+    body { font-size:12pt; line-height:1.5; margin:0; padding:0; }
+    .modal-content { width:auto; height:auto; margin:0; padding:20px; box-shadow:none; border:none; }
+    .modal-header .edit, .buttons-container, .buttons-container.hide-for-print { display:none !important; }
+  }
+</style>
+{% endblock css %}
+
+<div class="row align-items-center justify-content-center">
+  <div class="col-12 col-md-10 col-lg-8">
+    <div class="card" id="card-print">
+      <div class="card-body p-4">
+        <div class="card-header align-items-center d-flex" style="background-color:rgb(211, 246, 234)">
+          <h4 class="card-title mb-1 flex-grow-1 text-center">
+            <b style="color: rgba(24, 24, 40, 0.769);">Exercise Detail</b>
+          </h4>
+        </div>
+
+        <div class="card-body text-center">
+          <div class="position-relative d-inline-block">
+            <a class="image-popup"
+               href="{{ common_path }}{{ url_for('static', filename='exercise_image/' + exercises.image_file) }}"
+               title="">
+              <img src="{{ common_path }}{{ url_for('static', filename='exercise_image/' + exercises.image_file) }}"
+                   alt="exercise image" class="avatar-lg img-thumbnail">
+            </a>
+          </div>
+          <h5 style="color: rgb(107, 103, 163);" class="mt-4 mb-1">
+            <b>{{ exercises.title }}</b>
+          </h5>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table mb-0 table-borderless">
+            <tbody>
+              <tr>
+                <th><span style="color: rgb(107, 103, 163);" class="fw-medium">Id</span></th>
+                <td>{{ exercises.id }}</td>
+              </tr>
+              <tr>
+                <th><span style="color: rgb(107, 103, 163);" class="fw-medium">Description</span></th>
+                <td>{{ exercises.description }}</td>
+              </tr>
+              <tr>
+                <th><span style="color: rgb(107, 103, 163);" class="fw-medium">tags</span></th>
+                <td>{{ exercises.tags }}</td>
+              </tr>
+              <tr>
+                <th><span style="color: rgb(107, 103, 163);" class="fw-medium">Create Date</span></th>
+                <td>{{ exercises.created_at }}</td>
+              </tr>
+              <tr>
+                <th><span style="color: rgb(107, 103, 163);" class="fw-medium">Audio File</span></th>
+                <td class="customer_name">
+                  {% if exercises.audio_file %}
+                    <audio controls>
+                      <source src="{{ common_path }}{{ url_for('static', filename='audio/' + exercises.audio_file) }}">
+                      <source src="{{ common_path }}{{ url_for('static', filename='audio/' + exercises.audio_file) }}">
+                      Your browser does not support the audio element.
+                    </audio>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Centered action buttons -->
+        <div class="buttons-container mt-3">
+          <div class="d-flex gap-2">
+            <div class="edit">
+              <button class="btn btn-sm btn-success edit-item-btn" data-bs-toggle="modal"
+                      data-bs-target="#editModal{{ exercises.id }}">
+                Edit
+              </button>
+            </div>
+            <div class="remove">
+              <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal"
+                      data-bs-target="#deleteModal{{ exercises.id }}">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- /card-body -->
+    </div> <!-- /card -->
+  </div>
+</div>
+
+<!-- Edit Modal (PROPER) -->
+<div class="modal fade" id="editModal{{ exercises.id }}" tabindex="-1"
+     aria-labelledby="editModalLabel{{ exercises.id }}" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header bg-light p-3">
+        <h5 class="modal-title" id="editModalLabel{{ exercises.id }}">Edit Exercise</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form method="POST"
+            action="{{ url_for('admin_create.edit_exercise', cat_id=cat_id, exercise_id=exercises.id) }}"
+            enctype="multipart/form-data">
+        <div class="modal-body">
+          <!-- Title -->
+          <div class="mb-3">
+            <label for="exercise-name-field-{{ exercises.id }}" class="form-label">Exercise Name</label>
+            <input type="text"
+                   name="exercise_name"
+                   id="exercise-name-field-{{ exercises.id }}"
+                   class="form-control"
+                   value="{{ exercises.title }}"
+                   placeholder="Enter Exercise Name"
+                   required>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label for="description-field-{{ exercises.id }}" class="form-label">Description</label>
+            <input type="text"
+                   name="description"
+                   id="description-field-{{ exercises.id }}"
+                   class="form-control"
+                   value="{{ exercises.description }}"
+                   placeholder="Enter Description"
+                   required>
+          </div>
+
+          <!-- Tags (Choices-style, kept as-is) -->
+          <div class="mb-3">
+            <label for="choices-text-remove-button-{{ exercises.id }}" class="form-label">Tags</label>
+            <input class="form-control"
+                   id="choices-text-remove-button-{{ exercises.id }}"
+                   data-choices
+                   data-choices-limit="7"
+                   data-choices-removeItem
+                   name="tags"
+                   type="text"
+                   value="{{ exercises.tags }}"
+                   placeholder="#tag1, #tag2"
+                   required>
+          </div>
+
+          <!-- Image block with preview -->
+          <div class="mb-3">
+            <label class="form-label d-block">Image</label>
+            <div class="d-flex align-items-center gap-3">
+              <img
+                src="{{ url_for('static', filename='exercise_image/' + exercises.image_file) }}"
+                alt="current image"
+                class="rounded img-thumbnail"
+                style="width:96px;height:96px;object-fit:cover;"
+                id="image-preview-{{ exercises.id }}">
+              <div class="flex-grow-1">
+                <input type="file"
+                       name="image"
+                       id="image-input-{{ exercises.id }}"
+                       class="form-control"
+                       accept="image/*">
+                <small class="text-muted">Optional — leave empty to keep existing image.</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Audio block with preview -->
+          <div class="mb-3">
+            <label class="form-label d-block">Audio</label>
+            <div class="mb-2">
+              {% if exercises.audio_file %}
+                <audio controls class="w-100" id="audio-current-{{ exercises.id }}">
+                  <source src="{{ common_path }}{{ url_for('static', filename='audio/' + exercises.audio_file) }}">
+                  <source src="{{ common_path }}{{ url_for('static', filename='audio/' + exercises.audio_file) }}">
+                  Your browser does not support the audio element.
+                </audio>
+              {% else %}
+                <span class="text-muted">No audio uploaded</span>
+              {% endif %}
+            </div>
+            <input type="file"
+                   name="audio"
+                   id="audio-input-{{ exercises.id }}"
+                   class="form-control"
+                   accept="audio/*">
+            <small class="text-muted">Optional — leave empty to keep existing audio.</small>
+          </div>
+
+        </div> <!-- /modal-body -->
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-success" type="submit">Update Exercise</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ exercises.id }}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header border-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" action="{{ url_for('admin_create.delete_exercise', exe_id=exercises.id) }}">
+        <div class="modal-body">
+          <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                     colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
+          <h4 class="mt-3">Are you sure?</h4>
+          <p class="text-muted">Do you really want to delete <strong>{{ exercises.title }}</strong>?</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
+
+{# Keep your local assets if they’re needed by this page/layout #}
+<script src="{{ common_path }}{{ url_for('static', filename='assets/js/datatables.net-buttons/buttons.html5.min.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/js/datatables.net-buttons/buttons.print.min.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/js/datatables.net-buttons/dataTables.buttons.min.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/libs/swiper/swiper-bundle.min.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/js/pages/swiper.init.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/libs/prismjs/prism.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/libs/list.js/list.min.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/libs/list.pagination.js/list.pagination.min.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/js/pages/listjs.init.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/js/pages/profile-setting.init.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
+<script src="{{ common_path }}{{ url_for('static', filename='assets/js/pages/gallery.init.js') }}"></script>
+
+<!-- Image/Audio preview for this modal instance -->
+<script>
+  (function () {
+    const imgInput = document.getElementById('image-input-{{ exercises.id }}');
+    const imgPrev  = document.getElementById('image-preview-{{ exercises.id }}');
+    if (imgInput && imgPrev) {
+      imgInput.addEventListener('change', function (e) {
+        const f = e.target.files && e.target.files[0];
+        if (f) {
+          const url = URL.createObjectURL(f);
+          imgPrev.src = url;
+        }
+      });
+    }
+
+    const audioInput = document.getElementById('audio-input-{{ exercises.id }}');
+    const audioEl    = document.getElementById('audio-current-{{ exercises.id }}');
+    if (audioInput && audioEl) {
+      audioInput.addEventListener('change', function (e) {
+        const f = e.target.files && e.target.files[0];
+        if (f) {
+          const url = URL.createObjectURL(f);
+          audioEl.src = url;
+          audioEl.load();
+          audioEl.play().catch(()=>{});
+        }
+      });
+    }
+  })();
+</script>
+{% endblock javascript %}
+
+{% endblock content %}

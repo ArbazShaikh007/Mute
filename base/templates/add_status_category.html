@@ -1,0 +1,156 @@
+{% extends 'layout1.html' %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0">Total Session</h4>
+            </div><!-- end card header -->
+
+            <div class="card-body">
+                <div id="customerList">
+                    <div class="row g-4 mb-3">
+                        <div class="col-sm">
+                            <div class="d-flex justify-content-sm-start">
+                                <div class="search-box ms-2">
+                                    <input type="text" class="form-control search" placeholder="Search...">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+           
+
+                    <div class="table-responsive table-card mt-3 mb-1">
+                        <table class="table align-middle table-nowrap" id="customerTable">
+                            <thead class="table-light">
+                            <tr>
+                                <th class="sort align-center text-center" data-sort="phone" width="120px">Sr No.
+                                </th>
+
+                                <th class="sort align-left text-left" data-sort="customer_name" >
+                                  user
+                                </th>
+                                <th class="sort align-left text-left" data-sort="email">
+                                  session_type
+                                </th>
+                                <th class="sort align-left text-left" data-sort="email">
+                                  time_start 
+                                </th>
+                                <th class="sort align-left text-left" data-sort="email">
+                                  time_end 
+                                </th>
+                               <th class="sort" data-sort="status" >Status</th>
+                               <th class="sort align-left text-left" data-sort="email">
+                                Total time 
+                              </th>
+                              <th >Action</th>
+                            
+                            </tr>
+                            </thead>
+                            <tbody class="list form-check-all">
+                            {% for status in statuses %}
+                                <tr>
+                                    <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ2101</a>
+                                    </td>
+                                    <td class="phone align-center text-center">{{ loop.index }}</td>
+                                    <td class=" align-center text-center" >
+                                      <div class="d-flex align-items-center">
+                                        <div class="avatar-group">
+                                            <div class="avatar-group-item me-3">
+                                                <a class="image-popup" href="{{common_path}}{{url_for('static',filename='profile_pic/' + status.user.image_name)}}" title="">
+                                                <img width="100px"
+                                                    src="{{common_path}}{{url_for('static', filename='profile_pic/' + status.user.image_name)}}" alt=""
+                                                    class="rounded-circle avatar-xxs">
+                                            </div>
+                                        </div>
+                                        <h5 class="fs-14 my-1">
+                                            <a href="#"
+                                                class="customer_name text-reset">{{status.user.username}}</a>
+                                        </h5>
+                                    </div>
+
+                                      <td>
+                                        <div>
+                                            <h5 class="fs-14 my-1">
+                                                <a href="#"
+                                                    class="customer_name text-reset">{{status.session_type}}</a>
+                                            </h5>
+                                        </div></td>
+                                        <td>
+                                            <div class="flex-grow-1 ms-2">
+                                           
+                                                <h5 class="mb-0 me-5"> <a class="email" href="#">{{status.time_start}}</a></h5>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="flex-grow-1 ms-2 ">
+                                                <h5 class="mb-0"> <a class="email" href="#">{{status.time_end}}</a></h5>
+                                            </div>
+                                        </td>
+                                   
+                          
+                                    <td>
+                                       
+                                        <h5 class="status badge {% if status.status=='Active' %}badge-soft-success{% elif status.status=='Past' %}badge-soft-danger{% else %}badge-soft-secondary{% endif %} text-uppercase">{{status.status}}</h5>
+                                    </td>
+                                    <td>
+
+                                      <div class="flex-grow-1 ms-2 ">
+                                          <h6 class="mb-0"> <a class="email" href="#">{{status.total_time}}</a></h6>
+                                      </div>
+                                  </td>
+ 
+                                </tr>
+
+
+                  
+                        {% endfor %}
+
+                            </tbody>
+                        </table>
+                        <div class="noresult" style="display: none">
+                            <div class="text-center">
+                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                                           colors="primary:#121331,secondary:#08a88a"
+                                           style="width:75px;height:75px"></lord-icon>
+                                <h5 class="mt-2">Sorry! No Result Found</h5>
+                               
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <div class="pagination-wrap hstack gap-2">
+                            <a class="page-item pagination-prev disabled" href="#">
+                                Previous
+                            </a>
+                            <ul class="pagination listjs-pagination mb-0"></ul>
+                            <a class="page-item pagination-next" href="#">
+                                Next
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end col -->
+</div>
+
+
+
+{% block javascript %}
+<script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
+<script src="{{common_path}}{{url_for('static',filename='assets/libs/prismjs/prism.js')}}"></script>
+<script src="{{common_path}}{{url_for('static',filename='assets/libs/list.js/list.min.js')}}"></script>
+<script src="{{common_path}}{{url_for('static',filename='assets/libs/list.pagination.js/list.pagination.min.js')}}"></script>
+<script src="{{common_path}}{{url_for('static',filename='assets/js/pages/listjs.init.js')}}"></script>
+<script src="{{common_path}}{{url_for('static',filename='assets/libs/sweetalert2/sweetalert2.min.js')}}"></script>
+
+{% endblock javascript %}
+
+{% endblock content %}
+

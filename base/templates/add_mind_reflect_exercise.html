@@ -1,0 +1,221 @@
+{% extends 'layout1.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title mb-0">Exercise List</h4>
+      </div>
+      <!-- end card header -->
+
+      <div class="card-body">
+        <div id="customerList">
+          <div class="row g-4 mb-3">
+            <div class="col-sm-auto">
+              <!-- <div>
+                <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn"
+                  data-bs-target="#showModal">
+                  <i class="ri-add-line align-bottom me-1"></i> Add
+                </button>
+              </div> -->
+            </div>
+
+            <div class="table-responsive table-card mt-3 mb-1">
+              <table class="table align-middle table-nowrap" id="customerTable">
+                <thead class="table-light">
+                  <tr>
+                    <th>
+                        Exercise ID
+                    </th>
+                    <th>Profile Pic</th>
+                    <th>Username</th>
+                    <th>Question</th>
+                    <th>replies</th>
+                    <th>Tags</th>
+                    <th>Likes</th>
+                    <th>Anonymous Status</th>
+                    <th>Action</th>
+                 {#   <th>Action</th> #}
+                  </tr>
+                </thead>
+                {% for mind in mind_exercises %}
+
+
+                <tbody class="list form-check-all">
+                  <tr>
+                    <td>{{mind.id}}</td>
+                    <td>
+                      <div class="avatar-group-item me-3">
+                      
+                        <a class="image-popup" href="{{common_path}}{{url_for('static',filename='profile_pic/' + mind.user.image_name)}}" title="">
+                          <img width="100px"
+                               src="{{common_path}}{{url_for('static',filename='profile_pic/' + mind.user.image_name)}}" alt=""
+                               class="rounded-circle avatar-xxs">
+                        </a>
+                      </div>
+                       
+               
+                      </td>
+                    <td class="customer_name">{{mind.user.username}}</td>
+                    <td class="customer_name">{{mind.question}}</td>
+                    <td class="customer_name">{{mind.reply}}</td>
+                    <td class="customer_name">{{mind.tags}}</td>
+                    <td class="customer_name">{{mind.likes}}</td>
+                    {% if mind.is_anonymous %}
+                    <td class="customer_name">True</td>
+                    {% else %}
+                    <td class="customer_name">False</td>
+                    {% endif %}
+                                        
+                    <td>
+                      <div class="d-flex gap-2">
+                        <!-- <div class="edit">
+                         <button class="btn btn-sm btn-success edit-item-btn" data-bs-toggle="modal"
+                            data-bs-target="#editModal{{mind.id}}">
+                            Edit
+                          </button>
+                        </div> -->
+                        <div class="remove">
+                          <button class="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal{{mind.id}}">
+                            Remove
+                          </button> 
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <div class="modal fade" id="deleteModal{{mind.id}}" tabindex="-1"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            id="btn-close"></button>
+                        </div>
+                        <form method="POST" action="{{url_for('admin_create.delete_reflect_category',mind_id=mind.id)}}">
+
+                          <div class="modal-body">
+                            <div class="mt-2 text-center">
+                              <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                                colors="primary:#f7b84b,secondary:#f06548"
+                                style="width: 100px; height: 100px"></lord-icon>
+                              <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                                <h4>Are you Sure ?</h4>
+                                <p class="text-muted mx-4 mb-0">
+                                  Are you Sure You want to Remove this Category ?
+                                </p>
+                              </div>
+                            </div>
+                            <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                              <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">
+                                Close
+                              </button>
+                              <button type="submit" class="btn w-sm btn-danger" id="delete-record">
+                                Yes, Delete It!
+                              </button>
+                            </div>
+                          </div>
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                  {# <div class="modal fade" id="editModal{{mind.id}}" tabindex="-1"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header bg-light p-3">
+                          <h5 class="modal-title" id="exampleModalLabel"></h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            id="close-modal"></button>
+                        </div>
+                        <form method="POST" action="{{url_for('admin_create.edit_mind_category',cat_id=mind.id)}}">
+                          <div class="modal-body">
+
+                            <div class="mb-3">
+                              <label for="customername-field" class="form-label1">Category Name</label>
+                              <input type="text" name="title" id="customername-field" value="{{mind.title}}"
+                                class="form-control" placeholder="Enter Category Name" required />
+                            </div>
+
+                            
+
+
+
+                            <div class="modal-footer">
+                              <div class="hstack gap-2 justify-content-end">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                                  Close
+                                </button>
+                                <button type="submit" class="btn btn-success" id="add-btn">
+                                  Update Category
+                                </button>
+                              </div>
+                            </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div> #}
+
+                  {% endfor %}
+                </tbody>
+              </table>
+
+
+
+
+              <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header bg-light p-3">
+                      <h5 class="modal-title" id="exampleModalLabel"></h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="close-modal"></button>
+                    </div>
+                    <form method="POST" enctype="multipart/form-data" action="{{url_for('user_create.add_reflect_exercise',mind_id=mind_id)}}">
+                      <div class="modal-body">
+                      
+
+                        <div class="mb-3">
+                            <label for="customername-field" class="form-label1">question</label>
+                            <input type="text" name="question" id="customername-field" class="form-control"
+                              placeholder="Enter Description" required />
+                          </div>
+
+                          <div class="mb-3">
+                            <label for="customername-field" class="form-label1">Tags</label>
+                            <input type="text" name="tags" id="customername-field" class="form-control"
+                              placeholder="Enter Category Name" required />
+                          </div>
+
+                          <div class="mb-3">
+                            <label for="customername-field" class="form-label1">reply</label>
+                            <input type="text" name="reply" id="customername-field" class="form-control"
+                              placeholder="Enter Category Name" required />
+                          </div>
+
+
+                       
+
+                        <div class="modal-footer">
+                          <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                              Close
+                            </button>
+                            <button type="submit" class="btn btn-success" id="add-btn">
+                              Add Exercise
+                            </button>
+                          </div>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+         </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}

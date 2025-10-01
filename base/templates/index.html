@@ -1,0 +1,226 @@
+{% extends "layout1.html" %}
+{% block content%}
+
+<div class="row">
+  <div class="col-xl-3 col-md-6">
+    <!-- card -->
+    <div class="card card-animate">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="flex-grow-1 overflow-hidden">
+            <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+              Total Users
+            </p>
+          </div>
+        </div>
+        <div class="d-flex align-items-end justify-content-between mt-4">
+          <div>
+            <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+              <span class="counter-value" data-target="{{users}}">0</span>
+            </h4>
+            <a href="{{url_for('admin_view.total_users')}}" class="text-decoration-underline">See details</a>
+          </div>
+          <div class="avatar-sm flex-shrink-0">
+            <span class="avatar-title bg-soft-success rounded-circle fs-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="#06060C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-users text-info">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- end card body -->
+    </div>
+    <!-- end card -->
+  </div>
+
+
+      <div class="col-xl-3 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-1 overflow-hidden">
+                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                  Body
+                </p>
+              </div>
+            </div>
+            <div class="d-flex align-items-end justify-content-between mt-4">
+              <div>
+                <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                  <span class="counter-value" data-target="{{category}}">0</span>
+                </h4>
+                <a href="{{url_for('admin_view.category_page')}}" class="text-decoration-underline">See details</a>
+              </div>
+              <div class="avatar-sm flex-shrink-0">
+                <span class="avatar-title bg-soft-success rounded-circle fs-2">
+                  <i class="ri-function-line" width="24" height="24" viewBox="0 0 24 24"
+                    style="color:black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  </i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- end card body -->
+        </div>
+        <!-- end card -->
+      </div>
+
+
+
+
+      
+      <div class="col-xl-3 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-1 overflow-hidden">
+                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                  Mind
+                </p>
+              </div>
+            </div>
+            <div class="d-flex align-items-end justify-content-between mt-4">
+              <div>
+                <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                  <span class="counter-value" data-target="{{mind}}">0</span>
+                </h4>
+                <a href="{{url_for('admin_view.mind_category_page')}}" class="text-decoration-underline">See details</a>
+              </div>
+              <div class="avatar-sm flex-shrink-0">
+                <span class="avatar-title bg-soft-success rounded-circle fs-2">
+                  <i class=" ri-apps-2-line" width="24" height="24" viewBox="0 0 24 24"
+                  style="color:black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                </i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- end card body -->
+        </div>
+        <!-- end card -->
+      </div>
+
+     {# 
+      <div class="col-xl-3 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-1 overflow-hidden">
+                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                  Session Status
+                </p>
+              </div>
+            </div>
+            <div class="d-flex align-items-end justify-content-between mt-4">
+              <div>
+                <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                  <span class="counter-value" data-target="{{session}}">0</span>
+                </h4>
+                <a href="{{url_for('admin_view.status_category')}}" class="text-decoration-underline">See details</a>
+              </div>
+              <div class="avatar-sm flex-shrink-0">
+                <span class="avatar-title bg-soft-success rounded-circle fs-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="#06060C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-users text-info">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+ <!-- end card body -->
+        </div>
+        <!-- end card -->
+      </div>
+    #}
+
+
+      <div class="col-xl-3 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-1 overflow-hidden">
+                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                  Review Status
+                </p>
+              </div>
+            </div>
+            <div class="d-flex align-items-end justify-content-between mt-4">
+              <div>
+                <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                  <span class="counter-value" data-target="{{review_cat}}">0</span>
+                </h4>
+                <a href="{{url_for('admin_view.review_mind_category_page')}}" class="text-decoration-underline">See details</a>
+              </div>
+              <div class="avatar-sm flex-shrink-0">
+                <span class="avatar-title bg-soft-success rounded-circle fs-2">
+                  <i class=" ri-apps-line" width="24" height="24" viewBox="0 0 24 24"
+                  style="color:black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                </i>
+                </span>
+              </div>
+            </div>
+          </div>
+ <!-- end card body -->
+        </div>
+        <!-- end card -->
+      </div>
+
+
+
+
+      
+      {#
+      <div class="col-xl-3 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-1 overflow-hidden">
+                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                  Feedback
+                </p>
+              </div>
+            </div>
+            <div class="d-flex align-items-end justify-content-between mt-4">
+              <div>
+                <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                  <span class="counter-value" data-target="{{feeds}}">0</span>
+                </h4>
+                <a href="{{url_for('admin_view.feedback_page')}}" class="text-decoration-underline">See details</a>
+              </div>
+              <div class="avatar-sm flex-shrink-0">
+                <span class="avatar-title bg-soft-success rounded-circle fs-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="#06060C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-users text-info">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- end card body -->
+        </div>
+        <!-- end card -->
+      </div>
+      #}
+
+  {% endblock content %}

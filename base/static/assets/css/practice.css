@@ -1,0 +1,10 @@
+.container{
+    width: 500;
+    height: 500;
+    background-position: top center;
+    color: white;
+    background-attachment: fixed;
+    background:red  url(D:\SimplePractice\base\static\assets\images\bg-d.png) no-repeat;
+
+
+}

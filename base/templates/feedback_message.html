@@ -1,0 +1,70 @@
+{% extends 'layout1.html' %}
+{% block content %}
+
+<div class="content"
+    style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; display: block;">
+    <table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope=""
+        itemtype="http://schema.org/ConfirmAction"
+        style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; margin: 0; border: none;">
+        <tbody>
+            <tr style="font-family: 'Roboto', sans-serif; font-size: 14px; margin: 0;">
+                <td class="content-wrap"
+                    style="font-family: 'Roboto', sans-serif; box-sizing: border-box; color: #1f1f1f; font-size: 14px; vertical-align: top; margin: 0; padding: 30px; box-shadow: 0 3px 15px rgba(30,32,37,.06); border-radius: 7px; background-color: #ffffff;"
+                        valign="top">
+                    <meta itemprop="name" content="Confirm Email"
+                        style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0"
+                        style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+
+                        <tbody>
+
+                            <tr style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; border-top: 1px solid #4a4a4a;">
+                                <td class="content-block"
+                                    style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0; 
+                                        padding-top: 15px; border-top: none; padding-bottom: 15px; border-bottom: 1px solid #4a4a4a;" valign="bottom">
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="{{common_path}}{{url_for('static', filename='/profile_pic/' + feedback_message.feed.image_name)}}" alt="" height="35" width="35"
+                                            style="border-radius: 50px;">
+                                        <div style="margin-left: 8px;">
+                                            <span style="font-weight: 600;">{{feedback_message.feed.username}}</span>
+                                            <p style="font-size: 13px; margin-bottom: 0px; margin-top: 3px; color: #2d2d2d;">
+                                                {{feedback_message.feed.email}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                <td class="content-block"
+                                    style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 20px; line-height: 1.5; font-weight: 500; vertical-align: top; margin: 0; padding: 0 0 10px;
+                                        padding-top: 15px;" valign="top">
+                                    Message:
+                                </td>
+                            </tr>
+                            <tr
+                                style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                <td class="content-block"
+                                    style="font-family: 'Roboto', sans-serif; color: #2d2d2d; box-sizing: border-box; line-height: 1.5; font-size: 15px; vertical-align: top; margin: 0; padding: 0 0 10px;"
+                                        valign="top">
+                                    {{feedback_message.message}}
+                                </td>
+                            </tr>
+
+                            <div class="text-n mb-2">
+                                <a class="btn btn-soft-primary" href="{{url_for('admin_view.feedback_page')}}"> <i class="bx bx-left-arrow-alt"></i> </a>
+                           
+                            </div>
+                            
+                        </tbody>
+
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+</div>
+
+
+{% endblock content %}
