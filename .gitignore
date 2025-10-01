@@ -1,0 +1,10 @@
+# Python cache & bytecode
+__pycache__/
+*.pyc
+
+# Migrations (if generated files only)
+migrations/
+
+# Ignore only audio/video in static/audio
+base/static/audio/*.mp3
+base/static/audio/*.mp4
