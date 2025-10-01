@@ -87,24 +87,37 @@ class User(db.Model):
             return None
         return User.query.get(user_id)
 
-
 def token_required(f):
     @wraps(f)
     def decorator(*args, **kwargs):
         token = None
         if 'Authorization' in request.headers:
             token = request.headers['Authorization']
+
+        if not "Authorization" in request.headers:
+            return {'status': 0,'message': 'Authorization is missing'}, 401
+
         if not token:
-            return jsonify({'status': 0,'message': 'a valid token is missing'})
+            return {'status': 0,'message': 'a valid token is missing'}
         try:
             data = jwt.decode(token, os.getenv("SECRET_KEY"), algorithms=["HS256"])
-            print(data)
+
             active_user = User.query.filter_by(id=data['id']).first()
+
             if active_user.is_deleted == True :
-                return jsonify({'status': 0,'message': 'Account with this email is deleted'})
+                return {'status': 0,'message': 'Account with this email is deleted'}
+            if active_user.is_block == True:
+                return {'status': 0, 'message': 'You are block by admin'}, 401
                      
-        except:
-            return jsonify({'status': 0,'message': 'token is invalid'})
+        except jwt.ExpiredSignatureError:
+            return {"status": 0, "message": "Token has expired"}, 401
+        except jwt.InvalidTokenError:
+            return {"status": 0, "message": "Invalid token"}, 401
+        except Exception as e:
+            return {"status": 0, "message": f"An error occurred: {str(e)}"}, 401
+
+        if not active_user:
+            return {'status': 0, 'message': 'Invalid user'}, 401
 
         return f(active_user, *args, **kwargs)
 
@@ -172,11 +185,15 @@ class MindSubCategory(db.Model):
     def as_dict(self,active_user):
         user = User.query.filter_by(id=self.user_id).first()
 
+        reject_reason = self.reject_reason if self.reject_reason is not None else ''
+
         if self.type == "Reflect":
 
             is_my_post = False
             if user.id == active_user.id:
                 is_my_post = True
+
+            check_like = MindSubCategorylikes.query.filter_by(type="reflect",user_id = active_user.id,sub_cat_id = self.id).first()
 
             # reply = Replies.query.filter_by(user_id=active_user.id,reflect_id=self.id).first()
             # if reply or self.user_id == active_user.id:
@@ -204,10 +221,17 @@ class MindSubCategory(db.Model):
                 "admin_review_status": self.admin_review_status,
                 'audio_duration': "",
                 'is_my_post': is_my_post,
-                'is_my_like': False
+                'is_my_like': bool(check_like),
+                'reject_reason': reject_reason
             }
 
         else:
+            is_my_post = False
+            if user.id == active_user.id:
+                is_my_post = True
+
+            check_like = MindSubCategorylikes.query.filter_by(type="listen",user_id = active_user.id,sub_cat_id = self.id).first()
+
             return {
                 'id': self.id,
                 'title': self.title,
@@ -223,7 +247,11 @@ class MindSubCategory(db.Model):
                 'random_name': self.random_name if self.random_name is not None else '',
                 'random_image': COMMON_URL + self.random_image.replace('base', '') if self.random_image else "",
                 "admin_review_status": self.admin_review_status,
-                'post_type': self.type.lower()
+                'anonymous_status': self.is_anonymous,
+                'post_type': self.type.lower(),
+                'is_my_post': is_my_post,
+                'is_my_like': bool(check_like),
+                'reject_reason': reject_reason
             }
 
 class Reflect(db.Model):

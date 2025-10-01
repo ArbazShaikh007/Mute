@@ -17,7 +17,7 @@ def get_notification_count(active_user):
 
     return jsonify({"status": 1, "message": "Success",'notification_count': notification_count})
 
-@user_view.route("/my_notification_list", methods=['POST'])
+@user_view.route("/user/my_notification_list", methods=['POST'])
 @token_required
 def my_notification_list(active_user):
     data = request.get_json()
@@ -204,6 +204,8 @@ def mind_category_page(active_user):
              MindSubCategory.is_last_suggestion == False,
              or_(
                  MindSubCategory.title.ilike(
+                     f"%{search}%"), MindSubCategory.question.ilike(
+                     f"%{search}%"), MindSubCategory.transcript.ilike(
                      f"%{search}%"),
                  func.replace(
                      MindSubCategory.tags, '#', '').ilike(f"%{search}%"))).order_by(
@@ -261,6 +263,8 @@ def mind_reflect_page(active_user):
              MindSubCategory.is_last_suggestion == False,
              or_(
                  MindSubCategory.title.ilike(
+                     f"%{search}%"), MindSubCategory.question.ilike(
+                     f"%{search}%"), MindSubCategory.transcript.ilike(
                      f"%{search}%"),
                  func.replace(
                      MindSubCategory.tags, '#', '').ilike(f"%{search}%"))).order_by(
@@ -320,7 +324,9 @@ def mind_listen_page(active_user):
                     MindSubCategory.is_last_suggestion == False,
                     or_(
                          MindSubCategory.title.ilike(
-                         f"%{search}%"),
+                         f"%{search}%"), MindSubCategory.question.ilike(
+                     f"%{search}%"), MindSubCategory.transcript.ilike(
+                     f"%{search}%"),
                          func.replace(
                                       MindSubCategory.tags,'#', '').ilike(f"%{search}%"))).order_by(
                 MindSubCategory.id.desc()).paginate(
@@ -498,6 +504,8 @@ def user_history(active_user):
     # }
 
     data = [post.as_dict(active_user) for post in posts]
+
+    print('dataaaaaaaaaaaa',data)
 
     return jsonify({'status': 1, 'message': 'Success', 'data': data})
 

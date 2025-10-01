@@ -259,3 +259,12 @@ def user_update(active_user):
             return jsonify({'status': 1, 'message': 'Sucessfully Updated Profile', 'data': active_user.user_data(token=token)})
         else:
             return jsonify({'status': 0, 'message': 'Invalid Token'})
+
+@user_auth.route('/user/delete_account', methods=['POST'])
+@token_required
+def user_delete_account(active_user):
+
+    active_user.is_deleted = True
+    db.session.commit()
+
+    return jsonify({'status': 1,'message': 'Successfully account deleted'})

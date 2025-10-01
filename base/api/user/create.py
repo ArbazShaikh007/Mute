@@ -184,7 +184,7 @@ def likes(active_user):
             post.likes = 0
         db.session.delete(like)
         db.session.commit()
-        return jsonify({'status': 0, 'message': 'Unliked', 'data': like.as_dict_reflect(),'likes':post.likes})
+        return jsonify({'status': 1, 'message': 'Unliked', 'data': like.as_dict_reflect(),'likes':post.likes})
 
 @user_create.route('/reflect/replies_list', methods=['GET', 'POST'])
 @token_required
@@ -199,8 +199,7 @@ def reflect_replies_list(active_user):
     if not reflect_id:
         return jsonify({'status': 0,'message': 'Please select reflect first'})
 
-    get_replies = Replies.query.filter_by(reflect_id=reflect_id).order_by(
-        Replies.id.desc()).paginate(
+    get_replies = Replies.query.filter_by(reflect_id=reflect_id).paginate(
             page=page,
             per_page=per_page,
             error_out=False
@@ -381,7 +380,7 @@ def listen_likes(active_user):
         db.session.delete(like)
         db.session.commit()
 
-        return jsonify({'status': 0, 'message': 'Unliked', 'data': like.as_dict_listen(),'likes':post.likes})
+        return jsonify({'status': 1, 'message': 'Unliked', 'data': like.as_dict_listen(),'likes':post.likes})
 
 @user_create.route('/user/add_status_category',methods=['POST'])
 @login_required
@@ -448,7 +447,18 @@ def report_post(active_user):
     post_id = data.get('post_id')
     message = data.get('message')
 
-    post = Report_post.query.filter_by(user_id=active_user.id, sub_cat_id=post_id,type = post_type).first()
+    print('dataaaaaaaaaaa',data)
+
+    print('post_idddddddddd',post_id)
+    post_type = post_type.capitalize()
+
+    post = MindSubCategory.query.filter_by(id=post_id, type=post_type).first()
+    if not post:
+        return jsonify({'status': 0,'message': 'Invalid post'})
+
+    print('posttttttttttttttttttttttttt',post)
+
+    report_post = Report_post.query.filter_by(user_id=active_user.id, sub_cat_id=post_id,type = post_type).first()
 
     # if post_type == 'reflect':
     #     post = Report_post.query.filter_by(user_id=active_user.id,reflect_id=post_id).first()
@@ -457,10 +467,11 @@ def report_post(active_user):
     # else:
     #     post = None
         
-    if post :
+    if report_post:
         return jsonify({'status': 0, 'message': 'You have already reported this post'})
     else :
         report = Report_post(message=message, user_id=active_user.id, created_at=datetime.now(),type=post_type,sub_cat_id=post_id)
+        print('reporttttttttttttttttttttttt',report)
 
         # if post_type == 'reflect':
         #     report.reflect_id = post_id
@@ -472,11 +483,9 @@ def report_post(active_user):
         db.session.add(report)
         db.session.commit()
 
-        post = MindSubCategory.query.filter_by(id=post_id, type="Reflect").first()
-
         # Check the report count for the post
         report_count = Report_post.query.filter_by(
-            sub_cat_id=post.id,type=post
+            sub_cat_id=post.id,type=post_type
         ).count()
 
         # Specify the report threshold

@@ -1,2 +1,2 @@
-COMMON_URL = "http://192.168.31.14:1122"
+COMMON_URL = "http://192.168.1.69:1122"
 common_path = ""
