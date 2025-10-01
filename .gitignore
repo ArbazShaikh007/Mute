@@ -9,6 +9,5 @@ migrations/
 #base/static/audio/*.mp3
 #base/static/audio/*.mp4
 
-
 *.mp3
 *.mp4
