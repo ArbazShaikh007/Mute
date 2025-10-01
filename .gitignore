@@ -12,5 +12,4 @@ migrations/
 *.mp3
 *.mp4
 
-
-mute
+muteenv
