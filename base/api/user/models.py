@@ -98,14 +98,14 @@ def token_required(f):
             return {'status': 0,'message': 'Authorization is missing'}, 401
 
         if not token:
-            return {'status': 0,'message': 'a valid token is missing'}
+            return {'status': 0,'message': 'a valid token is missing'}, 401
         try:
             data = jwt.decode(token, os.getenv("SECRET_KEY"), algorithms=["HS256"])
 
             active_user = User.query.filter_by(id=data['id']).first()
 
             if active_user.is_deleted == True :
-                return {'status': 0,'message': 'Account with this email is deleted'}
+                return {'status': 0,'message': 'Account with this email is deleted'}, 401
             if active_user.is_block == True:
                 return {'status': 0, 'message': 'You are block by admin'}, 401
                      
@@ -577,7 +577,7 @@ class Notification(db.Model):
     message = db.Column(db.String(500))
     page = db.Column(db.String(100))
     is_read = db.Column(db.Boolean(), nullable=False)
-    created_time = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
     exercise_id = db.Column(db.Integer, db.ForeignKey('exercise.id', ondelete='CASCADE', onupdate='CASCADE'))
     sub_cat_id = db.Column(db.Integer, db.ForeignKey('mind_sub_category.id', ondelete='CASCADE', onupdate='CASCADE'))
 
@@ -587,7 +587,7 @@ class Notification(db.Model):
                       nullable=False)
 
     def as_dict(self):
-        user=User.query.filter_by(id=self.user_id).first()
+        user=User.query.filter_by(id=self.by_id).first()
         return{
             "id":self.id,
             "message":self.message,
